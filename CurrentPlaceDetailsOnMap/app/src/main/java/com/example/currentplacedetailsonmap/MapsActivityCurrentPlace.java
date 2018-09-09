@@ -180,8 +180,31 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
+
+        addMarkers();
     }
 
+    //test markers
+    private void addMarkers() {
+        LatLng dummy1= new LatLng(37.4200,-122.0839);
+        LatLng dummy2= new LatLng(37.4230,-122.0848);
+        LatLng dummy3= new LatLng(37.4190,-122.08845);
+
+        mMap.addMarker(new MarkerOptions()
+                .title(getString(R.string.default_info_title))
+                .position(dummy1)
+                .snippet(getString(R.string.default_info_snippet)));
+
+        mMap.addMarker(new MarkerOptions()
+                .title(getString(R.string.default_info_title))
+                .position(dummy2)
+                .snippet(getString(R.string.default_info_snippet)));
+
+        mMap.addMarker(new MarkerOptions()
+                .title(getString(R.string.default_info_title))
+                .position(dummy3)
+                .snippet(getString(R.string.default_info_snippet)));
+    }
     /**
      * Gets the current location of the device, and positions the map's camera.
      */
