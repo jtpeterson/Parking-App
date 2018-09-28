@@ -1,5 +1,6 @@
 package com.example.currentplacedetailsonmap;
 
+
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -33,6 +34,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * An activity that displays a map showing the place at the device's current location.
@@ -43,6 +49,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     private static final String TAG = MapsActivityCurrentPlace.class.getSimpleName();
     private GoogleMap mMap;
     private CameraPosition mCameraPosition;
+    private DatabaseReference mDatabase;
 
     // The entry points to the Places API.
     private GeoDataClient mGeoDataClient;
@@ -76,6 +83,9 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //initialize database
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -186,6 +196,17 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
 
     //test markers
     private void addMarkers() {
+        ValueEventListener dataHook = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+            }
+s
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        }
         LatLng dummy1= new LatLng(37.4200,-122.0839);
         LatLng dummy2= new LatLng(37.4230,-122.0848);
         LatLng dummy3= new LatLng(37.4190,-122.08845);
