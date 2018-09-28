@@ -201,12 +201,12 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
 
             }
-s
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        }
+        };
         LatLng dummy1= new LatLng(37.4200,-122.0839);
         LatLng dummy2= new LatLng(37.4230,-122.0848);
         LatLng dummy3= new LatLng(37.4190,-122.08845);
