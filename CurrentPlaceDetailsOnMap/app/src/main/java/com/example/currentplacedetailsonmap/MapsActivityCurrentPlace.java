@@ -39,6 +39,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.Query;
 
 /**
  * An activity that displays a map showing the place at the device's current location.
@@ -50,6 +51,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     private GoogleMap mMap;
     private CameraPosition mCameraPosition;
     private DatabaseReference mDatabase;
+    private ParkingSpot[] spotslist;
 
     // The entry points to the Places API.
     private GeoDataClient mGeoDataClient;
@@ -85,7 +87,22 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         //initialize database
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference("parking spots");
+        Log.d("onCreate", "Database: " + mDatabase.toString());
+        //Query testQuery = mDatabase
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot data: dataSnapshot.getChildren()) {
+                    Log.d("onCreate", "Does this work: " + data.toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //TODO
+            }
+        });
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -111,6 +128,17 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         mapFragment.getMapAsync(this);
 
     }
+    ValueEventListener updateMap = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
 
     /**
      * Saves the state of the map when the activity is paused.
@@ -196,7 +224,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
 
     //test markers
     private void addMarkers() {
-        ValueEventListener dataHook = new ValueEventListener() {
+        /*ValueEventListener dataHook = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -206,10 +234,14 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        };
+        };*/
         LatLng dummy1= new LatLng(37.4200,-122.0839);
         LatLng dummy2= new LatLng(37.4230,-122.0848);
         LatLng dummy3= new LatLng(37.4190,-122.08845);
+        ParkingSpot spot = new ParkingSpot(true, 37.420, 122.0839);
+        mDatabase.child(id).setValue(spot);
+
+
 
         mMap.addMarker(new MarkerOptions()
                 .title(getString(R.string.default_info_title))
