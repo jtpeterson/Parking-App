@@ -41,6 +41,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.Query;
 
+
+import java.util.*;
+
 /**
  * An activity that displays a map showing the place at the device's current location.
  */
@@ -51,7 +54,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     private GoogleMap mMap;
     private CameraPosition mCameraPosition;
     private DatabaseReference mDatabase;
-    private ParkingSpot[] spotslist;
+    private List<ParkingSpot> spotslist = new ArrayList<ParkingSpot>();
 
     // The entry points to the Places API.
     private GeoDataClient mGeoDataClient;
@@ -86,23 +89,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //initialize database
-        mDatabase = FirebaseDatabase.getInstance().getReference("parking spots");
-        Log.d("onCreate", "Database: " + mDatabase.toString());
-        //Query testQuery = mDatabase
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot data: dataSnapshot.getChildren()) {
-                    Log.d("onCreate", "Does this work: " + data.toString());
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                //TODO
-            }
-        });
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -126,19 +113,25 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        //
+        // test code
+        // populateDatabase();
+
 
     }
-    ValueEventListener updateMap = new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
+    //test code
+    /*
+    private void populateDatabase() {
+        ParkingSpot spot = new ParkingSpot(true, 37.4276, -122.0845);
+        mDatabase.child(spot.getId()).setValue(spot);
+        ParkingSpot spot2 = new ParkingSpot(true, 37.4286, -122.0846);
+        mDatabase.child(spot2.getId()).setValue(spot2);
+        ParkingSpot spot3 = new ParkingSpot(true, 37.4296, -122.0847);
+        mDatabase.child(spot3.getId()).setValue(spot3);
 
-        }
+    }*/
 
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
 
-        }
-    };
 
     /**
      * Saves the state of the map when the activity is paused.
@@ -182,6 +175,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
      */
     @Override
     public void onMapReady(GoogleMap map) {
+        mDatabase = FirebaseDatabase.getInstance().getReference("parking spots");
         mMap = map;
 
         // Use a custom info window adapter to handle multiple lines of text in the
@@ -222,30 +216,39 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         addMarkers();
     }
 
-    //test markers
     private void addMarkers() {
-        /*ValueEventListener dataHook = new ValueEventListener() {
+        Query query = FirebaseDatabase.getInstance().getReference("parking spots").orderByChild("isAvailable").equalTo(true);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                spotslist.clear();
+                //Log.d("valueEventListener", "" + dataSnapshot.exists());
 
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot datasnap : dataSnapshot.getChildren()) {
+                        //Log.d("valueEventListener", datasnap.toString());
+                        ParkingSpot spot = datasnap.getValue(ParkingSpot.class);
+                        //Log.d("valueEventListener", spot.getId().toString());
+                        spotslist.add(spot);
+                        Log.d("valueEventListener", spotslist.toString());
+                    }
+                }
+                markerHelper(spotslist);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        };*/
-        LatLng dummy1= new LatLng(37.4200,-122.0839);
-        LatLng dummy2= new LatLng(37.4230,-122.0848);
-        LatLng dummy3= new LatLng(37.4190,-122.08845);
-        ParkingSpot spot = new ParkingSpot(true, 37.420, 122.0839);
-        mDatabase.child(id).setValue(spot);
+        });
 
 
 
-        mMap.addMarker(new MarkerOptions()
+
+
+        /*mMap.addMarker(new MarkerOptions()
                 .title(getString(R.string.default_info_title))
-                .position(dummy1)
+                .position(spotCheck)
                 .snippet(getString(R.string.default_info_snippet)));
 
         mMap.addMarker(new MarkerOptions()
@@ -256,8 +259,23 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         mMap.addMarker(new MarkerOptions()
                 .title(getString(R.string.default_info_title))
                 .position(dummy3)
-                .snippet(getString(R.string.default_info_snippet)));
+                .snippet(getString(R.string.default_info_snippet)));*/
     }
+
+    private void markerHelper(List<ParkingSpot> spots) {
+        Log.d("MarkerHelper", spots.toString());
+        for (ParkingSpot spot : spots) {
+            Log.d("MarkerHelper", spot.toString());
+            LatLng data = new LatLng(spot.getLatitude(), spot.getLongitude());
+            mMap.addMarker(new MarkerOptions()
+                    .title(getString(R.string.default_info_title))
+                    .position(data)
+                    .snippet(getString(R.string.default_info_snippet)));
+        }
+
+    }
+
+
     /**
      * Gets the current location of the device, and positions the map's camera.
      */
@@ -284,6 +302,34 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
                             mMap.moveCamera(CameraUpdateFactory
                                     .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                        }
+                    }
+                });
+            }
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
+
+    //Adds users current location to the database, called when a user releases their parking spot
+    private void addCurrentLocationToDatabaseAsOpen() {
+
+
+        try {
+            if (mLocationPermissionGranted) {
+                Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
+                locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (task.isSuccessful()) {
+                            // Set the map's camera position to the current location of the device.
+                            mLastKnownLocation = task.getResult();
+                            ParkingSpot currentSpot = new ParkingSpot(true, mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
+                            mDatabase.child(currentSpot.getId()).setValue(currentSpot);
+                        } else {
+                            Log.d(TAG, "Current location is null. Using defaults.");
+                            Log.e(TAG, "Exception: %s", task.getException());
+
                         }
                     }
                 });

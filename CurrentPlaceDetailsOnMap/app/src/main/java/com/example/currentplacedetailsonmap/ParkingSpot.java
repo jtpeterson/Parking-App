@@ -18,6 +18,7 @@ public class ParkingSpot {
         this.latitude = latitude;
         this.longitude = longitude;
         this.id = "" + Math.abs(latitude) + "" + Math.abs(longitude);
+        this.id = id.replaceAll("[0-9]","");
     }
 
     public ParkingSpot(boolean isAvailable, double latitude, double longitude) {
@@ -25,6 +26,7 @@ public class ParkingSpot {
         this.latitude = latitude;
         this.longitude = longitude;
         this.id = "" + Math.abs(latitude) + "" + Math.abs(longitude);
+        this.id = id.replaceAll("[^0-9]","");
     }
 
     public String getCost() {
