@@ -16,6 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -85,6 +88,10 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     private String[] mLikelyPlaceAttributions;
     private LatLng[] mLikelyPlaceLatLngs;
 
+    // Buttons
+    private Button parking;
+    private Button leaving;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +125,28 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         // populateDatabase();
 
 
+        parking = (Button) findViewById(R.id.parkingButton);
+        leaving = (Button) findViewById(R.id.leavingButton);
+
+        parking.setVisibility(View.VISIBLE);
+        leaving.setVisibility(View.GONE);
+
+        // these 2 functions flip the visibilty of the buttons
+        parking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                leaving.setVisibility(View.VISIBLE);
+                parking.setVisibility(View.GONE);
+            }
+        });
+
+        leaving.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                parking.setVisibility(View.VISIBLE);
+                leaving.setVisibility(View.GONE);
+            }
+        });
     }
     //test code
     /*

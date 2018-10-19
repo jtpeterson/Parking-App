@@ -4,4 +4,23 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.currentplacedetailsonmap.MapsActivityCurrentPlace" />
+    tools:context="com.example.currentplacedetailsonmap.MapsActivityCurrentPlace" >
+
+    <Button
+        android:id="@+id/parkingButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="550dp"
+        android:text="I've Parked"
+        android:textColor="#fff"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/leavingButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="550dp"
+        android:text="I'm Leaving"
+        android:textColor="#fff"
+        android:visibility="invisible" />
+</fragment>
