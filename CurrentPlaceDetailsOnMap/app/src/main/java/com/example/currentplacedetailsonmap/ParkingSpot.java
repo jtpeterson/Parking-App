@@ -45,6 +45,10 @@ public class ParkingSpot {
         return isAvailable;
     }
 
+    public void setisAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+
     public double getLatitude() {
         return latitude;
     }

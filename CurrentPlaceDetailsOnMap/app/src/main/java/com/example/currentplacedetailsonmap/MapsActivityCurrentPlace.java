@@ -43,6 +43,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.Query;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 
 import java.util.*;
@@ -88,6 +90,9 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     private String[] mLikelyPlaceAttributions;
     private LatLng[] mLikelyPlaceLatLngs;
 
+    //Saved Parking Spot
+    ParkingSpot mySpot;
+
     // Buttons
     private Button parking;
     private Button leaving;
@@ -131,12 +136,13 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         parking.setVisibility(View.VISIBLE);
         leaving.setVisibility(View.GONE);
 
-        // these 2 functions flip the visibilty of the buttons
+        // these 2 functions flip the visibilty of the buttons and
         parking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 leaving.setVisibility(View.VISIBLE);
                 parking.setVisibility(View.GONE);
+                removeCurrentLocationFromDatabase();
             }
         });
 
@@ -145,6 +151,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             public void onClick(View v) {
                 parking.setVisibility(View.VISIBLE);
                 leaving.setVisibility(View.GONE);
+                addCurrentLocationToDatabase();
             }
         });
     }
@@ -341,7 +348,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     }
 
     //Adds users current location to the database, called when a user releases their parking spot
-    private void addCurrentLocationToDatabaseAsOpen() {
+    private void addCurrentLocationToDatabase() {
 
 
         try {
@@ -353,8 +360,12 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = task.getResult();
+
                             ParkingSpot currentSpot = new ParkingSpot(true, mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
                             mDatabase.child(currentSpot.getId()).setValue(currentSpot);
+                            mySpot = currentSpot;
+
+
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
@@ -366,6 +377,17 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
         }
+    }
+    //sets parking spot to false, called when user parks in spot
+    private void removeCurrentLocationFromDatabase() {
+        if (mySpot != null) {
+            mySpot.setisAvailable(false);
+            mDatabase.child(mySpot.getId()).setValue(mySpot);
+        } else  {
+            Log.d(TAG, "mySpot is null, if this was thrown, something went wrong");
+
+        }
+
     }
 
 
