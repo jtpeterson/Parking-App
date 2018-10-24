@@ -10,7 +10,8 @@ public class ParkingSpot {
 
     }
 
-    public ParkingSpot(String cost, String lotType, String specialty, boolean isAvailable, double latitude, double longitude) {
+    public ParkingSpot(String cost, String lotType, String specialty, boolean isAvailable,
+                       double latitude, double longitude) {
         this.cost = cost;
         this.lotType = lotType;
         this.specialty = specialty;
