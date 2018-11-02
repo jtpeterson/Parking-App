@@ -303,10 +303,19 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         for (ParkingSpot spot : spots) {
             Log.d("MarkerHelper", spot.toString());
             LatLng data = new LatLng(spot.getLatitude(), spot.getLongitude());
+            String stringbuilder = "";
+            if(spot.getLotType() != null) {
+                stringbuilder += "\nLot Type: " + spot.getLotType();
+            }
+            if(spot.getCost() != null) {
+                stringbuilder += "\nCost: " + spot.getCost();
+            }
+            if(spot.getSpecialty() != null) {
+                stringbuilder += "\nSpecialty: " + spot.getSpecialty();
+            }
             mMap.addMarker(new MarkerOptions()
-                    .title(getString(R.string.default_info_title))
                     .position(data)
-                    .snippet(getString(R.string.default_info_snippet)));
+                    .snippet(stringbuilder));
         }
 
     }
