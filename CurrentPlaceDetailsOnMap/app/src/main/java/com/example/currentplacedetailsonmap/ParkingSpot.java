@@ -34,6 +34,8 @@ public class ParkingSpot {
         return cost;
     }
 
+    public String toString() {return id;}
+
     public String getLotType() {
         return lotType;
     }

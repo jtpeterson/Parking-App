@@ -264,8 +264,13 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
                     for (DataSnapshot datasnap : dataSnapshot.getChildren()) {
                         //Log.d("valueEventListener", datasnap.toString());
                         ParkingSpot spot = datasnap.getValue(ParkingSpot.class);
+                        Log.d("Filter1", spot.toString());
+                        if (spot.getId().equals("3742961220847")) {
+                            Log.d("Filter2", spot.toString());
+                            spotslist.add(spot);
+                        }
                         //Log.d("valueEventListener", spot.getId().toString());
-                        spotslist.add(spot);
+
                         Log.d("valueEventListener", spotslist.toString());
                     }
                 }
