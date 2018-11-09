@@ -33,4 +33,30 @@
         android:ems="10"
         android:inputType="numberDecimal"
         android:text="Upper Bound" />
+
+    <TextView
+        android:id="@+id/lotType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lot Type"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <Spinner
+        android:id="@+id/lotTypeDropDown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/lot_types" />
+
+    <TextView
+        android:id="@+id/lotSpecialty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lot Specialty"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <Spinner
+        android:id="@+id/specialty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
