@@ -23,4 +23,13 @@
         android:text="I'm Leaving"
         android:textColor="#fff"
         android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/filterPage"
+        android:layout_width="50dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="100dp"
+        android:text="Filters"
+        android:textColor="#fff"
+        android:visibility="visible" />
 </fragment>

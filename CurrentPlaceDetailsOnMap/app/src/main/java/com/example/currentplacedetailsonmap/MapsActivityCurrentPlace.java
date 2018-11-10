@@ -2,6 +2,7 @@ package com.example.currentplacedetailsonmap;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -96,6 +97,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     // Buttons
     private Button parking;
     private Button leaving;
+    private Button gotoFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +156,15 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
                 addCurrentLocationToDatabase();
             }
         });
+
+        gotoFilter = (Button) findViewById(R.id.filterPage);
+
+        gotoFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFilterPage();
+            }
+        });
     }
     //test code
     /*
@@ -167,7 +178,10 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
 
     }*/
 
-
+    public void openFilterPage() {
+        Intent intent = new Intent(this, FilterActivity.class);
+        startActivity(intent);
+    }
 
     /**
      * Saves the state of the map when the activity is paused.
