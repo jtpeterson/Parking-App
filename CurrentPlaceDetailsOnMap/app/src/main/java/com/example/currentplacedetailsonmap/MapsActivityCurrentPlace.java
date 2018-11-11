@@ -323,14 +323,20 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             Log.d("MarkerHelper", spot.toString());
             LatLng data = new LatLng(spot.getLatitude(), spot.getLongitude());
             String stringbuilder = "";
+            if(spot.getCost() != null) {
+                stringbuilder += "Cost: " + spot.getCost();
+            } else {
+                stringbuilder += "Cost: N/A";
+            }
             if(spot.getLotType() != null) {
                 stringbuilder += "\nLot Type: " + spot.getLotType();
-            }
-            if(spot.getCost() != null) {
-                stringbuilder += "\nCost: " + spot.getCost();
+            } else {
+                stringbuilder += "\nLot Type: N/A";
             }
             if(spot.getSpecialty() != null) {
                 stringbuilder += "\nSpecialty: " + spot.getSpecialty();
+            } else {
+                stringbuilder += "\nSpecialty: N/A";
             }
             mMap.addMarker(new MarkerOptions()
                     .position(data)
