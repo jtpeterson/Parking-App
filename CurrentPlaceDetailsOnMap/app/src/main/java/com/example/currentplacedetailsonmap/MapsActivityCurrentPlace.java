@@ -158,6 +158,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         });
 
         gotoFilter = (Button) findViewById(R.id.filterPage);
+        gotoFilter.setVisibility(View.GONE);
 
         gotoFilter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,7 +214,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.option_get_place) {
+        if (item.getItemId() == R.id.option_goto_filter) {
             openFilterPage();
         }
         return true;
