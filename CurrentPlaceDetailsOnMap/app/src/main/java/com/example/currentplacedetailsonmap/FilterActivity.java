@@ -32,9 +32,9 @@ public class FilterActivity extends AppCompatActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                lotType = String.valueOf(spinner1);
-                specialty = String.valueOf(spinner2);
-                upperBound = String.valueOf(mEdit);
+                lotType = String.valueOf(spinner1.getSelectedItem());
+                specialty = String.valueOf(spinner2.getSelectedItem());
+                upperBound = String.valueOf(mEdit.getText());
                 submit();
             }
         });
