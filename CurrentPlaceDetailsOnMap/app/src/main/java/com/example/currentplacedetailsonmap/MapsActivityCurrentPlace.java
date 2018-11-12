@@ -110,6 +110,35 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             mLastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
             mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
+        if (getIntent().getStringExtra("upperBound") != null) {
+            Log.d("filtertester", getIntent().getStringExtra("lotType"));
+            List<String> lotList = new ArrayList<String>();
+            List<String> specList = new ArrayList<String>();
+
+
+            String lotType = getIntent().getStringExtra("lotType");
+            String specialty = getIntent().getStringExtra("specialty");
+            if (lotType.equals("Pick One")) {
+                lotList.add("Grass");
+                lotList.add("UnderGround");
+                lotList.add("Garage/Deck");
+                lotList.add("Street");
+            }
+            if (specialty.equals("Pick One")){
+                specList.add("Electric");
+                specList.add("Handicap");
+                specList.add("Motorcycle");
+                specList.add("Bus");
+            }
+            specList.add(specialty);
+            lotList.add(lotType);
+            String upperBound = getIntent().getStringExtra("upperBound");
+            //mMap.clear();
+            Log.d("clearFinished", getIntent().getStringExtra("lotType"));
+            addMarkersfilter(upperBound,lotList, specList);
+            //addMarkerNum(getIntent().getStringExtra("upperBound").toString());
+            //addMarkers();
+        }
 
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_maps);
@@ -163,7 +192,9 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         gotoFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               // mMap.clear();
                 openFilterPage();
+
             }
         });
     }
@@ -180,8 +211,10 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     }*/
 
     public void openFilterPage() {
+        //mMap.clear();
         Intent intent = new Intent(this, FilterActivity.class);
         startActivity(intent);
+        //mMap.clear();
     }
 
     /**
@@ -264,9 +297,82 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
-        addMarkers();
+        //addMarkers();
     }
+    private  void addMarkerNum(final String upperBound){
+        Query query = FirebaseDatabase.getInstance().getReference("parking spots").orderByChild("isAvailable").equalTo(true);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                spotslist.clear();
+                //Log.d("valueEventListener", "" + dataSnapshot.exists()
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot datasnap : dataSnapshot.getChildren()) {
+                        //Log.d("valueEventListener", datasnap.toString());
 
+                        ParkingSpot spot = datasnap.getValue(ParkingSpot.class);
+                        String spotCost = spot.getCost();
+                        String spotLotType = spot.getLotType();
+                        String spotSpecialty = spot.getSpecialty();
+
+                        if (Double.parseDouble(upperBound) >= Double.parseDouble(spotCost))
+                            spotslist.add(spot);
+
+
+                        //Log.d("valueEventListener", spot.getId().toString());
+
+                        Log.d("valueEventListener", spotslist.toString());
+                    }
+                }
+                markerHelper(spotslist);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void addMarkersfilter(final String upper, final List<String> lotList, final List<String> specialtyList) {
+        Query query = FirebaseDatabase.getInstance().getReference("parking spots").orderByChild("isAvailable").equalTo(true);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                spotslist.clear();
+                //Log.d("valueEventListener", "" + dataSnapshot.exists()
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot datasnap : dataSnapshot.getChildren()) {
+                        //Log.d("valueEventListener", datasnap.toString());
+
+                        ParkingSpot spot = datasnap.getValue(ParkingSpot.class);
+                        String spotCost = spot.getCost();
+
+                        String spotLotType = spot.getLotType();
+                        String spotSpecialty = spot.getSpecialty();
+                        //String upperPerHr = "$" + upper+"/hr";
+                        //Log.d("costformat", "" + upperPerHr);
+
+                        if (lotList.contains(spotLotType) && specialtyList.contains(spotSpecialty)) {
+                            if(Double.parseDouble(upper)>=Double.parseDouble(spotCost)) {
+                                spotslist.add(spot);
+                            }
+
+                        }
+
+                        //Log.d("valueEventListener", spot.getId().toString());
+
+                        Log.d("valueEventListener", spotslist.toString());
+                    }
+                }
+                markerHelper(spotslist);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
     private void addMarkers() {
         Query query = FirebaseDatabase.getInstance().getReference("parking spots").orderByChild("isAvailable").equalTo(true);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -279,11 +385,10 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
                     for (DataSnapshot datasnap : dataSnapshot.getChildren()) {
                         //Log.d("valueEventListener", datasnap.toString());
                         ParkingSpot spot = datasnap.getValue(ParkingSpot.class);
-                        Log.d("Filter1", spot.toString());
-                        if (spot.getId().equals("3742961220847")) {
-                            Log.d("Filter2", spot.toString());
-                            spotslist.add(spot);
-                        }
+
+
+                        spotslist.add(spot);
+
                         //Log.d("valueEventListener", spot.getId().toString());
 
                         Log.d("valueEventListener", spotslist.toString());
@@ -320,6 +425,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
 
     private void markerHelper(List<ParkingSpot> spots) {
         Log.d("MarkerHelper", spots.toString());
+        //mMap.clear();
         for (ParkingSpot spot : spots) {
             Log.d("MarkerHelper", spot.toString());
             LatLng data = new LatLng(spot.getLatitude(), spot.getLongitude());
