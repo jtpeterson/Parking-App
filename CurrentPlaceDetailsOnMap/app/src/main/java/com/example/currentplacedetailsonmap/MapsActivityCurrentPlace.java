@@ -99,9 +99,15 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     private Button leaving;
     private Button gotoFilter;
 
+
+    //User
+    private User localuser;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
 
 
@@ -454,6 +460,17 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
 
 
     /**
+     * Saves User Filters to the database
+     * @param user
+     */
+    private void saveUserFilters(User user) {
+        DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
+        uDatabase.child(user.getUsername()).setValue(user);
+
+    }
+
+
+    /**
      * Gets the current location of the device, and positions the map's camera.
      */
     private void getDeviceLocation() {
@@ -470,9 +487,12 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = task.getResult();
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            if (mLastKnownLocation != null) {
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                        new LatLng(mLastKnownLocation.getLatitude(),
+                                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            }
+
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
