@@ -34,6 +34,14 @@
             android:name="com.example.currentplacedetailsonmap.FilterActivity"
             android:label="@string/title_filter_activity">
         </activity>
+        <activity
+            android:name="com.example.currentplacedetailsonmap.LoginActivity"
+            android:label="@string/title_login_activity">
+        </activity>
+        <activity
+            android:name="com.example.currentplacedetailsonmap.MenuActivity"
+            android:label="@string/title_menu_activity">
+        </activity>
     </application>
 
 </manifest>

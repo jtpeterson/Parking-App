@@ -19,21 +19,11 @@
         android:text="Price Range"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-    <EditText
-        android:id="@+id/lowerBound"
+    <Spinner
+        android:id="@+id/priceRangeDropDown"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        android:text="Lower Bound" />
-
-    <EditText
-        android:id="@+id/upperBound"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        android:text="Upper Bound" />
+        android:entries="@array/price_range" />
 
     <TextView
         android:id="@+id/lotType"

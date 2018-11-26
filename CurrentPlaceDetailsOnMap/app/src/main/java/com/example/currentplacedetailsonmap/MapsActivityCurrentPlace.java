@@ -102,14 +102,29 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
 
     //User
     private User localuser;
+    public boolean loggedIn;
+
+    //Intent
+    private Intent intent;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        intent = getIntent();
 
-
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            loggedIn = false;
+            intent.putExtra("loggedIn", loggedIn);
+        } else {
+            if (extras.getBoolean("loggedIn")) {
+                loggedIn = true;
+            } else {
+                loggedIn = false;
+            }
+        }
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -195,11 +210,14 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         gotoFilter = (Button) findViewById(R.id.filterPage);
         gotoFilter.setVisibility(View.GONE);
 
+        // for testing purposes, this button appears when the user is logged in
+        if (loggedIn) {gotoFilter.setVisibility(View.VISIBLE); }
+
         gotoFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                // mMap.clear();
-                openFilterPage();
+                openMenuPage();
 
             }
         });
@@ -216,9 +234,9 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
 
     }*/
 
-    public void openFilterPage() {
+    public void openMenuPage() {
         //mMap.clear();
-        Intent intent = new Intent(this, FilterActivity.class);
+        Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
         //mMap.clear();
     }
@@ -254,7 +272,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.option_goto_filter) {
-            openFilterPage();
+            openMenuPage();
         }
         return true;
     }

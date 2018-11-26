@@ -12,21 +12,41 @@ public class FilterActivity extends AppCompatActivity {
 
     private Spinner spinner1;
     private Spinner spinner2;
-    private EditText mEdit;
+    private Spinner spinner3;
+
     private Button confirm;
+
     public String lotType;
     public String specialty;
-    public String upperBound;
+    public String priceRange;
+
+    public boolean loggedIn;
+
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        intent = getIntent();
+
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            loggedIn = false;
+            intent.putExtra("loggedIn", loggedIn);
+        } else {
+            if (extras.getBoolean("loggedIn")) {
+                loggedIn = true;
+            } else {
+                loggedIn = false;
+            }
+        }
+
         setContentView(R.layout.activity_filters);
 
         spinner1 = (Spinner) findViewById(R.id.lotTypeDropDown);
         spinner2 = (Spinner) findViewById(R.id.specialtyDropDown);
-        mEdit = (EditText) findViewById(R.id.upperBound);
+        spinner3 = (Spinner) findViewById(R.id.priceRangeDropDown);
         confirm = (Button) findViewById(R.id.confirm);
 
         confirm.setOnClickListener(new View.OnClickListener() {
@@ -34,17 +54,17 @@ public class FilterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 lotType = String.valueOf(spinner1.getSelectedItem());
                 specialty = String.valueOf(spinner2.getSelectedItem());
-                upperBound = String.valueOf(mEdit.getText());
+                priceRange = String.valueOf(spinner3.getSelectedItem());
                 submit();
             }
         });
     }
 
     public void submit() {
-        Intent intent = new Intent(this, MapsActivityCurrentPlace.class);
+        intent.setClass(this, MenuActivity.class);
         intent.putExtra("lotType", lotType);
         intent.putExtra("specialty", specialty);
-        intent.putExtra("upperBound", upperBound);
+        intent.putExtra("priceRange", priceRange);
         startActivity(intent);
     }
 }
