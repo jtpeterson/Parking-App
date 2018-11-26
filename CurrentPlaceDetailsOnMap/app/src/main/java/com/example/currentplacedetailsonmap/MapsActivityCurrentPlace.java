@@ -236,7 +236,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
 
     public void openMenuPage() {
         //mMap.clear();
-        Intent intent = new Intent(this, MenuActivity.class);
+        intent.setClass(this, MenuActivity.class);
         startActivity(intent);
         //mMap.clear();
     }
