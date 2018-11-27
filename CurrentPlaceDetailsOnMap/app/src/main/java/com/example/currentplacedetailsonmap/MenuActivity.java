@@ -40,7 +40,6 @@ public class MenuActivity extends AppCompatActivity {
         gotoFilter = (Button) findViewById(R.id.gotoFilter);
         gotoLogin = (Button) findViewById(R.id.gotoLogin);
         gotoMaps = (Button) findViewById(R.id.gotoMaps);
-        gotoRegistration = (Button) findViewById(R.id.gotoRegistration);
 
         gotoFilter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +64,6 @@ public class MenuActivity extends AppCompatActivity {
 
         if (loggedIn) {
             gotoLogin.setVisibility(View.GONE);
-            gotoRegistration.setVisibility(View.GONE);
         }
     }
 

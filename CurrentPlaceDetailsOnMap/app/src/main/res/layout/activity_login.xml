@@ -54,6 +54,12 @@
         android:text="Confirm" />
 
     <Button
+        android:id="@+id/gotoRegistration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Not a user? Click here to register" />
+
+    <Button
         android:id="@+id/cancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

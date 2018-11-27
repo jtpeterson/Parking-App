@@ -42,6 +42,10 @@
             android:name="com.example.currentplacedetailsonmap.MenuActivity"
             android:label="@string/title_menu_activity">
         </activity>
+        <activity
+            android:name="com.example.currentplacedetailsonmap.RegistrationActivity"
+            android:label="@string/title_registration_activity">
+        </activity>
     </application>
 
 </manifest>

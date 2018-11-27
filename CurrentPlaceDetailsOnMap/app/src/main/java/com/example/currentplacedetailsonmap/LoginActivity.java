@@ -12,6 +12,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public Button cancel;
     public Button confirm;
+    public Button gotoRegistration;
 
     public boolean loggedIn;
 
@@ -39,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
 
         cancel = (Button) findViewById(R.id.cancel);
         confirm = (Button) findViewById(R.id.confirm);
+        gotoRegistration = (Button) findViewById(R.id.gotoRegistration);
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,13 +60,27 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void goBack() {
-        intent.setClass(this, MenuActivity.class);
-        startActivity(intent);
+        intent = getIntent();
+        Bundle extras = intent.getExtras();
+        Intent i = new Intent(this, MenuActivity.class);
+        i.putExtras(extras);
+        startActivity(i);
     }
 
     public void login() {
-        intent.setClass(this, MenuActivity.class);
-        intent.putExtra("loggedIn", loggedIn);
-        startActivity(intent);
+        intent = getIntent();
+        Bundle extras = intent.getExtras();
+        Intent i = new Intent(this, MenuActivity.class);
+        i.putExtras(extras);
+        i.putExtra("loggedIn", loggedIn);
+        startActivity(i);
+    }
+
+    public void gotoRegistration() {
+        intent = getIntent();
+        Bundle extras = intent.getExtras();
+        Intent i = new Intent(this, RegistrationActivity.class);
+        i.putExtras(extras);
+        startActivity(i);
     }
 }
