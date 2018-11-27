@@ -4,20 +4,27 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/gotoFilter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="filter" />
-
-    <Button
         android:id="@+id/gotoLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="login" />
 
     <Button
+        android:id="@+id/gotoRegistration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Register" />
+
+    <Button
+        android:id="@+id/gotoFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="filter" />
+
+    <Button
         android:id="@+id/gotoMaps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Back" />
+
 </LinearLayout>

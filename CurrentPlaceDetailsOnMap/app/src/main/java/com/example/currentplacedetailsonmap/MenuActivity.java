@@ -11,6 +11,7 @@ public class MenuActivity extends AppCompatActivity {
     private Button gotoFilter;
     private Button gotoLogin;
     private Button gotoMaps;
+    private Button gotoRegistration;
 
     public boolean loggedIn;
 
@@ -39,6 +40,7 @@ public class MenuActivity extends AppCompatActivity {
         gotoFilter = (Button) findViewById(R.id.gotoFilter);
         gotoLogin = (Button) findViewById(R.id.gotoLogin);
         gotoMaps = (Button) findViewById(R.id.gotoMaps);
+        gotoRegistration = (Button) findViewById(R.id.gotoRegistration);
 
         gotoFilter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,23 +59,37 @@ public class MenuActivity extends AppCompatActivity {
         gotoMaps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goBack();
+                openMaps();
             }
         });
+
+        if (loggedIn) {
+            gotoLogin.setVisibility(View.GONE);
+            gotoRegistration.setVisibility(View.GONE);
+        }
     }
 
     public void openLogin() {
-        intent.setClass(this, LoginActivity.class);
-        startActivity(intent);
+        intent = getIntent();
+        Bundle extras = getIntent().getExtras();
+        Intent i = new Intent(this, LoginActivity.class);
+        i.putExtras(extras);
+        startActivity(i);
     }
 
     public void openFilter() {
-        intent.setClass(this, FilterActivity.class);
-        startActivity(intent);
+        intent = getIntent();
+        Bundle extras = getIntent().getExtras();
+        Intent i = new Intent(this, FilterActivity.class);
+        i.putExtras(extras);
+        startActivity(i);
     }
 
-    public void goBack() {
-        intent.setClass(this, MapsActivityCurrentPlace.class);
-        startActivity(intent);
+    public void openMaps() {
+        intent = getIntent();
+        Bundle extras = getIntent().getExtras();
+        Intent i = new Intent(this, MapsActivityCurrentPlace.class);
+        i.putExtras(extras);
+        startActivity(i);
     }
 }

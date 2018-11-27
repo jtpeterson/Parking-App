@@ -8,6 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FilterActivity extends AppCompatActivity {
 
     private Spinner spinner1;
@@ -20,6 +23,10 @@ public class FilterActivity extends AppCompatActivity {
     public String specialty;
     public String priceRange;
 
+    public List<String> prices;
+    public List<String> lots;
+    public List<String> spots;
+
     public boolean loggedIn;
 
     private Intent intent;
@@ -29,6 +36,15 @@ public class FilterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         intent = getIntent();
+
+        setContentView(R.layout.activity_filters);
+
+        setStrings();
+
+        spinner1 = (Spinner) findViewById(R.id.lotTypeDropDown);
+        spinner2 = (Spinner) findViewById(R.id.specialtyDropDown);
+        spinner3 = (Spinner) findViewById(R.id.priceRangeDropDown);
+        confirm = (Button) findViewById(R.id.confirm);
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
@@ -40,14 +56,12 @@ public class FilterActivity extends AppCompatActivity {
             } else {
                 loggedIn = false;
             }
+            if (extras.getString("lotType") != null) {
+                spinner1.setSelection(lots.indexOf(extras.getString("lotType")));
+                spinner2.setSelection(spots.indexOf(extras.getString("specialty")));
+                spinner3.setSelection(prices.indexOf(extras.getString("priceRange")));
+            }
         }
-
-        setContentView(R.layout.activity_filters);
-
-        spinner1 = (Spinner) findViewById(R.id.lotTypeDropDown);
-        spinner2 = (Spinner) findViewById(R.id.specialtyDropDown);
-        spinner3 = (Spinner) findViewById(R.id.priceRangeDropDown);
-        confirm = (Button) findViewById(R.id.confirm);
 
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,10 +75,36 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     public void submit() {
-        intent.setClass(this, MenuActivity.class);
-        intent.putExtra("lotType", lotType);
-        intent.putExtra("specialty", specialty);
-        intent.putExtra("priceRange", priceRange);
-        startActivity(intent);
+        intent = getIntent();
+        Bundle extras = getIntent().getExtras();
+        Intent i = new Intent(this, MenuActivity.class);
+        i.putExtras(extras);
+        i.putExtra("lotType", lotType);
+        i.putExtra("specialty", specialty);
+        i.putExtra("priceRange", priceRange);
+        startActivity(i);
+    }
+
+    public void setStrings() {
+        prices = new ArrayList<>();
+        prices.add("Pick One");
+        prices.add("$0.00 - $5.00 per hour");
+        prices.add("$0.00 - $10.00 per hour");
+        prices.add("$0.00 - $20.00 per hour");
+        prices.add("All");
+
+        lots = new ArrayList<>();
+        lots.add("Pick One");
+        lots.add("Grass");
+        lots.add("Underground");
+        lots.add("Garage/Deck");
+        lots.add("Street");
+
+        spots = new ArrayList<>();
+        spots.add("Pick One");
+        spots.add("Electric");
+        spots.add("Handicap");
+        spots.add("Motorcycle");
+        spots.add("Bus");
     }
 }
