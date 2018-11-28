@@ -170,10 +170,17 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             String upperBound = "";
             switch (priceRange) {
                 case "Pick One": upperBound += "100";
+                    break;
                 case "$0.00 - $5.00 per hour": upperBound += "5";
+                    break;
                 case "$0.00 - $10.00 per hour": upperBound += "10";
+                    break;
                 case "$0.00 - $20.00 per hour": upperBound += "20";
+                    break;
                 case "All": upperBound += "100";
+                    break;
+                default: upperBound += "100";
+                    break;
             }
             mMap.clear();
             Log.d("clearFinished", getIntent().getStringExtra("lotType"));
