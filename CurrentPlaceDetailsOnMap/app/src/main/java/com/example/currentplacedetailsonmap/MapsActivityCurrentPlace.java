@@ -154,9 +154,9 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             specList.add(specialty);
             lotList.add(lotType);
             String upperBound = getIntent().getStringExtra("upperBound");
-            //mMap.clear();
+            mMap.clear();
             Log.d("clearFinished", getIntent().getStringExtra("lotType"));
-            addMarkersfilter(upperBound,lotList, specList);
+            //addMarkersfilter(upperBound,lotList, specList);
             //addMarkerNum(getIntent().getStringExtra("upperBound").toString());
             //addMarkers();
         }
@@ -321,7 +321,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
-        //addMarkers();
+        addMarkers();
     }
     private  void addMarkerNum(final String upperBound){
         Query query = FirebaseDatabase.getInstance().getReference("parking spots").orderByChild("isAvailable").equalTo(true);
