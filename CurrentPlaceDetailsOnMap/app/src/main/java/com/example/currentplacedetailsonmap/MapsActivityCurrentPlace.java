@@ -107,6 +107,11 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     //Intent
     private Intent intent;
 
+    // String Lists
+    List<String> lotList;
+    List<String> specList;
+    List<String> priceList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,10 +119,15 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
 
         intent = getIntent();
 
-        Bundle extras = getIntent().getExtras();
+        Bundle extras = intent.getExtras();
         if (extras == null) {
             loggedIn = false;
             intent.putExtra("loggedIn", loggedIn);
+            Log.d("logcheck", "check");
+            intent.putExtra("priceRange", "default");
+            intent.putExtra("lotType", "default");
+            intent.putExtra("specialty", "default");
+            extras = intent.getExtras();
         } else {
             if (extras.getBoolean("loggedIn")) {
                 loggedIn = true;
@@ -131,32 +141,43 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             mLastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
             mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
-        if (getIntent().getStringExtra("upperBound") != null) {
-            Log.d("filtertester", getIntent().getStringExtra("lotType"));
-            List<String> lotList = new ArrayList<String>();
-            List<String> specList = new ArrayList<String>();
+        if (!(extras.getString("priceRange").equals("default"))) {
+            Log.d("filtertester", extras.getString("lotType"));
+            //setStrings();
+            lotList = new ArrayList<>();
+            specList = new ArrayList<>();
+            priceList = new ArrayList<>();
 
-
-            String lotType = getIntent().getStringExtra("lotType");
-            String specialty = getIntent().getStringExtra("specialty");
+            String lotType = extras.getString("lotType");
+            String specialty = extras.getString("specialty");
+            String priceRange = extras.getString("priceRange");
             if (lotType.equals("Pick One")) {
                 lotList.add("Grass");
                 lotList.add("UnderGround");
                 lotList.add("Garage/Deck");
                 lotList.add("Street");
+            } else {
+                lotList.add(lotType);
             }
             if (specialty.equals("Pick One")){
                 specList.add("Electric");
                 specList.add("Handicap");
                 specList.add("Motorcycle");
                 specList.add("Bus");
+            } else {
+                specList.add(specialty);
             }
-            specList.add(specialty);
-            lotList.add(lotType);
-            String upperBound = getIntent().getStringExtra("upperBound");
+            String upperBound = "";
+            switch (priceRange) {
+                case "Pick One": upperBound += "100";
+                case "$0.00 - $5.00 per hour": upperBound += "5";
+                case "$0.00 - $10.00 per hour": upperBound += "10";
+                case "$0.00 - $20.00 per hour": upperBound += "20";
+                case "All": upperBound += "100";
+            }
             mMap.clear();
             Log.d("clearFinished", getIntent().getStringExtra("lotType"));
-            //addMarkersfilter(upperBound,lotList, specList);
+            addMarkersFilter(upperBound, lotList, specList);
             //addMarkerNum(getIntent().getStringExtra("upperBound").toString());
             //addMarkers();
         }
@@ -233,6 +254,29 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         mDatabase.child(spot3.getId()).setValue(spot3);
 
     }*/
+
+//    public void setStrings() {
+//        priceList = new ArrayList<>();
+//        priceList.add("Pick One");
+//        priceList.add("$0.00 - $5.00 per hour");
+//        priceList.add("$0.00 - $10.00 per hour");
+//        priceList.add("$0.00 - $20.00 per hour");
+//        priceList.add("All");
+//
+//        lotList = new ArrayList<>();
+//        lotList.add("Pick One");
+//        lotList.add("Grass");
+//        lotList.add("Underground");
+//        lotList.add("Garage/Deck");
+//        lotList.add("Street");
+//
+//        specList = new ArrayList<>();
+//        specList.add("Pick One");
+//        specList.add("Electric");
+//        specList.add("Handicap");
+//        specList.add("Motorcycle");
+//        specList.add("Bus");
+//    }
 
     public void openMenuPage() {
         //mMap.clear();
@@ -357,7 +401,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             }
         });
     }
-    private void addMarkersfilter(final String upper, final List<String> lotList, final List<String> specialtyList) {
+    private void addMarkersFilter(final String upper, final List<String> lotList, final List<String> specialtyList) {
         Query query = FirebaseDatabase.getInstance().getReference("parking spots").orderByChild("isAvailable").equalTo(true);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
