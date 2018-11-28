@@ -12,6 +12,7 @@ public class MenuActivity extends AppCompatActivity {
     private Button gotoLogin;
     private Button gotoMaps;
     private Button gotoRegistration;
+    private Button logOut;
 
     public boolean loggedIn;
 
@@ -40,8 +41,7 @@ public class MenuActivity extends AppCompatActivity {
         gotoFilter = (Button) findViewById(R.id.gotoFilter);
         gotoLogin = (Button) findViewById(R.id.gotoLogin);
         gotoMaps = (Button) findViewById(R.id.gotoMaps);
-
-
+        logOut = (Button) findViewById(R.id.logOut);
 
         gotoFilter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,9 +64,19 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logOut();
+            }
+        });
 
         if (loggedIn) {
             gotoLogin.setVisibility(View.GONE);
+            logOut.setVisibility(View.VISIBLE);
+        } else {
+            gotoLogin.setVisibility(View.VISIBLE);
+            logOut.setVisibility(View.GONE);
         }
     }
 
@@ -94,4 +104,12 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    public void logOut() {
+        intent = getIntent();
+        Bundle extras = getIntent().getExtras();
+        Intent i = new Intent(this, MenuActivity.class);
+        i.putExtras(extras);
+        i.putExtra("loggedIn", false);
+        startActivity(i);
+    }
 }

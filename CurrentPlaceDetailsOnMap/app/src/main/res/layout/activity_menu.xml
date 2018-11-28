@@ -4,21 +4,28 @@
     android:layout_height="match_parent">
 
     <Button
+        android:id="@+id/gotoFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Set Filters for Parking Spaces" />
+
+    <Button
+        android:id="@+id/gotoMaps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Return To Main Map" />
+
+    <Button
         android:id="@+id/gotoLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="login/register" />
 
     <Button
-        android:id="@+id/gotoFilter"
+        android:id="@+id/logOut"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="filter" />
-
-    <Button
-        android:id="@+id/gotoMaps"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Back" />
+        android:text="Log Out"
+        android:visibility="gone" />
 
 </LinearLayout>

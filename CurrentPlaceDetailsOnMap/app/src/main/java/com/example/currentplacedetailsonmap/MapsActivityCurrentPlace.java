@@ -232,7 +232,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         gotoFilter.setVisibility(View.GONE);
 
         // for testing purposes, this button appears when the user is logged in
-        if (loggedIn) { gotoFilter.setVisibility(View.VISIBLE); }
+//        if (loggedIn) { gotoFilter.setVisibility(View.VISIBLE); }
 
         gotoFilter.setOnClickListener(new View.OnClickListener() {
             @Override
