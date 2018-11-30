@@ -10,18 +10,20 @@
         android:id="@+id/parkingButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="550dp"
+        android:layout_marginTop="560dp"
+        android:background="@color/colorPrimary"
         android:text="I've Parked"
-        android:textColor="#fff"
+        android:textColor="#ffffff"
         android:visibility="visible" />
 
     <Button
         android:id="@+id/leavingButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="550dp"
+        android:layout_marginTop="560dp"
+        android:background="@color/colorPrimary"
         android:text="I'm Leaving"
-        android:textColor="#fff"
+        android:textColor="#ffffff"
         android:visibility="invisible" />
 
     <Button
