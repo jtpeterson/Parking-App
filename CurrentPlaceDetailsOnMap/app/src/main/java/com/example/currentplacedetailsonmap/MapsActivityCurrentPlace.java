@@ -141,53 +141,6 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             mLastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
             mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
-//        if (!(extras.getString("priceRange").equals("default"))) {
-//            Log.d("filtertester", extras.getString("lotType"));
-//            //setStrings();
-//            lotList = new ArrayList<>();
-//            specList = new ArrayList<>();
-//            priceList = new ArrayList<>();
-//
-//            String lotType = extras.getString("lotType");
-//            String specialty = extras.getString("specialty");
-//            String priceRange = extras.getString("priceRange");
-//            if (lotType.equals("Pick One")) {
-//                lotList.add("Grass");
-//                lotList.add("UnderGround");
-//                lotList.add("Garage/Deck");
-//                lotList.add("Street");
-//            } else {
-//                lotList.add(lotType);
-//            }
-//            if (specialty.equals("Pick One")){
-//                specList.add("Electric");
-//                specList.add("Handicap");
-//                specList.add("Motorcycle");
-//                specList.add("Bus");
-//            } else {
-//                specList.add(specialty);
-//            }
-//            String upperBound = "";
-//            switch (priceRange) {
-//                case "Pick One": upperBound += "100";
-//                    break;
-//                case "$0.00 - $5.00 per hour": upperBound += "5";
-//                    break;
-//                case "$0.00 - $10.00 per hour": upperBound += "10";
-//                    break;
-//                case "$0.00 - $20.00 per hour": upperBound += "20";
-//                    break;
-//                case "All": upperBound += "100";
-//                    break;
-//                default: upperBound += "100";
-//                    break;
-//            }
-//            mMap.clear();
-//            Log.d("clearFinished", getIntent().getStringExtra("lotType"));
-//            addMarkersFilter(upperBound, lotList, specList);
-//            //addMarkerNum(getIntent().getStringExtra("upperBound").toString());
-//            //addMarkers();
-//        }
 
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_maps);
@@ -275,7 +228,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             String priceRange = extras.getString("priceRange");
             if (lotType.equals("Pick One")) {
                 lotList.add("Grass");
-                lotList.add("UnderGround");
+                lotList.add("Underground");
                 lotList.add("Garage/Deck");
                 lotList.add("Street");
             } else {
