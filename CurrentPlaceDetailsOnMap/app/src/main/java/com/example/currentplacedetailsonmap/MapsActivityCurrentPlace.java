@@ -141,6 +141,81 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             mLastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
             mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
+
+        // Retrieve the content view that renders the map.
+        setContentView(R.layout.activity_maps);
+
+        // Construct a GeoDataClient.
+        mGeoDataClient = Places.getGeoDataClient(this, null);
+
+        // Construct a PlaceDetectionClient.
+        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
+
+        // Construct a FusedLocationProviderClient.
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        // Build the map.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+        parking = (Button) findViewById(R.id.parkingButton);
+        leaving = (Button) findViewById(R.id.leavingButton);
+
+        parking.setVisibility(View.VISIBLE);
+        leaving.setVisibility(View.GONE);
+
+        // these 2 functions flip the visibility of the buttons and
+        parking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                leaving.setVisibility(View.VISIBLE);
+                parking.setVisibility(View.GONE);
+                removeCurrentLocationFromDatabase();
+            }
+        });
+
+        leaving.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                parking.setVisibility(View.VISIBLE);
+                leaving.setVisibility(View.GONE);
+                addCurrentLocationToDatabase();
+            }
+        });
+
+        gotoFilter = (Button) findViewById(R.id.filterPage);
+        gotoFilter.setVisibility(View.GONE);
+
+        gotoFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // mMap.clear();
+                openMenuPage();
+            }
+        });
+
+        Log.d("mMap", "first?");
+    }
+    //test code
+    /*
+    private void populateDatabase() {
+        ParkingSpot spot = new ParkingSpot(true, 37.4276, -122.0845);
+        mDatabase.child(spot.getId()).setValue(spot);
+        ParkingSpot spot2 = new ParkingSpot(true, 37.4286, -122.0846);
+        mDatabase.child(spot2.getId()).setValue(spot2);
+        ParkingSpot spot3 = new ParkingSpot(true, 37.4296, -122.0847);
+        mDatabase.child(spot3.getId()).setValue(spot3);
+
+    }*/
+
+    public void openMenuPage() {
+        intent.setClass(this, MenuActivity.class);
+        startActivity(intent);
+    }
+
+    public void setFilters() {
+        Bundle extras = intent.getExtras();
         if (!(extras.getString("priceRange").equals("default"))) {
             Log.d("filtertester", extras.getString("lotType"));
             //setStrings();
@@ -153,7 +228,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             String priceRange = extras.getString("priceRange");
             if (lotType.equals("Pick One")) {
                 lotList.add("Grass");
-                lotList.add("UnderGround");
+                lotList.add("Underground");
                 lotList.add("Garage/Deck");
                 lotList.add("Street");
             } else {
@@ -187,109 +262,9 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             addMarkersFilter(upperBound, lotList, specList);
             //addMarkerNum(getIntent().getStringExtra("upperBound").toString());
             //addMarkers();
+        } else {
+            addMarkers();
         }
-
-        // Retrieve the content view that renders the map.
-        setContentView(R.layout.activity_maps);
-
-        // Construct a GeoDataClient.
-        mGeoDataClient = Places.getGeoDataClient(this, null);
-
-        // Construct a PlaceDetectionClient.
-        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
-
-        // Construct a FusedLocationProviderClient.
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-        // Build the map.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        //
-        // test code
-        // populateDatabase();
-
-
-        parking = (Button) findViewById(R.id.parkingButton);
-        leaving = (Button) findViewById(R.id.leavingButton);
-
-        parking.setVisibility(View.VISIBLE);
-        leaving.setVisibility(View.GONE);
-
-        // these 2 functions flip the visibilty of the buttons and
-        parking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                leaving.setVisibility(View.VISIBLE);
-                parking.setVisibility(View.GONE);
-                removeCurrentLocationFromDatabase();
-            }
-        });
-
-        leaving.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                parking.setVisibility(View.VISIBLE);
-                leaving.setVisibility(View.GONE);
-                addCurrentLocationToDatabase();
-            }
-        });
-
-        gotoFilter = (Button) findViewById(R.id.filterPage);
-        gotoFilter.setVisibility(View.GONE);
-
-        // for testing purposes, this button appears when the user is logged in
-//        if (loggedIn) { gotoFilter.setVisibility(View.VISIBLE); }
-
-        gotoFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               // mMap.clear();
-                openMenuPage();
-
-            }
-        });
-    }
-    //test code
-    /*
-    private void populateDatabase() {
-        ParkingSpot spot = new ParkingSpot(true, 37.4276, -122.0845);
-        mDatabase.child(spot.getId()).setValue(spot);
-        ParkingSpot spot2 = new ParkingSpot(true, 37.4286, -122.0846);
-        mDatabase.child(spot2.getId()).setValue(spot2);
-        ParkingSpot spot3 = new ParkingSpot(true, 37.4296, -122.0847);
-        mDatabase.child(spot3.getId()).setValue(spot3);
-
-    }*/
-
-//    public void setStrings() {
-//        priceList = new ArrayList<>();
-//        priceList.add("Pick One");
-//        priceList.add("$0.00 - $5.00 per hour");
-//        priceList.add("$0.00 - $10.00 per hour");
-//        priceList.add("$0.00 - $20.00 per hour");
-//        priceList.add("All");
-//
-//        lotList = new ArrayList<>();
-//        lotList.add("Pick One");
-//        lotList.add("Grass");
-//        lotList.add("Underground");
-//        lotList.add("Garage/Deck");
-//        lotList.add("Street");
-//
-//        specList = new ArrayList<>();
-//        specList.add("Pick One");
-//        specList.add("Electric");
-//        specList.add("Handicap");
-//        specList.add("Motorcycle");
-//        specList.add("Bus");
-//    }
-
-    public void openMenuPage() {
-        //mMap.clear();
-        intent.setClass(this, MenuActivity.class);
-        startActivity(intent);
-        //mMap.clear();
     }
 
     /**
@@ -322,7 +297,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.option_goto_filter) {
+        if (item.getItemId() == R.id.option_goto_menu) {
             openMenuPage();
         }
         return true;
@@ -336,6 +311,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     public void onMapReady(GoogleMap map) {
         mDatabase = FirebaseDatabase.getInstance().getReference("parking spots");
         mMap = map;
+        Log.d("mMap", "jebus");
 
         // Use a custom info window adapter to handle multiple lines of text in the
         // info window contents.
@@ -372,7 +348,9 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
-        addMarkers();
+        setFilters();
+        //addMarkers();
+        Log.d("mMap", mMap.toString());
     }
     private  void addMarkerNum(final String upperBound){
         Query query = FirebaseDatabase.getInstance().getReference("parking spots").orderByChild("isAvailable").equalTo(true);
