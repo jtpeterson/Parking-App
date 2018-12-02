@@ -111,6 +111,17 @@ public class LoginActivity extends AppCompatActivity {
                         });
                         alert.show();
                     }
+                }else{
+                    final AlertDialog alert = new AlertDialog.Builder(LoginActivity.this).create();
+                    alert.setTitle("Authentication Failed");
+                    alert.setMessage("Incorrect username or password");
+                    alert.setButton(Dialog.BUTTON_POSITIVE,"OK",new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            alert.dismiss();
+                        }
+                    });
+                    alert.show();
                 }
             }
 
