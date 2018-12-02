@@ -1,13 +1,12 @@
 package com.example.currentplacedetailsonmap;
 
 public class User {
-    int priceboundFilter;
-    String lotTypeFilter, specialtyFilter, username, password;
+    String lotTypeFilter, specialtyFilter, username, password, priceboundFilter;
 
     public User(String username) {
         this.username = username;
     }
-    public User(String username, String password, int priceboundFilter, String lotTypeFilter, String specialtyFilter) {
+    public User(String username, String password, String priceboundFilter, String lotTypeFilter, String specialtyFilter) {
         this.username = username;
         this.priceboundFilter = priceboundFilter;
         this.lotTypeFilter = lotTypeFilter;
@@ -15,7 +14,7 @@ public class User {
         this.password = password;
     }
 
-    public int getPriceboundFilter() {
+    public String getPriceboundFilter() {
         return priceboundFilter;
     }
 
@@ -37,7 +36,7 @@ public class User {
         this.lotTypeFilter = lotTypeFilter;
     }
 
-    public void setPriceboundFilter(int priceboundFilter) {
+    public void setPriceboundFilter(String priceboundFilter) {
         this.priceboundFilter = priceboundFilter;
     }
 

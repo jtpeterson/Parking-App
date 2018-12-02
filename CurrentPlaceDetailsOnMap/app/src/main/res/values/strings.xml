@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Current Place Details</string>
-    <string name="title_activity_maps">Current Place Details</string>
+    <string name="title_activity_maps">Main Map</string>
     <string name="title_filter_activity">Filters</string>
     <string name="title_login_activity">Login/Registration</string>
     <string name="title_menu_activity">Main Menu</string>
