@@ -112,6 +112,12 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     List<String> specList;
     List<String> priceList;
 
+    private String username;
+
+    public String lotType;
+    public String specialty;
+    public String priceRange;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,13 +130,14 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             loggedIn = false;
             intent.putExtra("loggedIn", loggedIn);
             Log.d("logcheck", "check");
-            intent.putExtra("priceRange", "default");
-            intent.putExtra("lotType", "default");
-            intent.putExtra("specialty", "default");
+            intent.putExtra("priceRange", "Pick One");
+            intent.putExtra("lotType", "Pick One");
+            intent.putExtra("specialty", "Pick One");
             extras = intent.getExtras();
         } else {
             if (extras.getBoolean("loggedIn")) {
                 loggedIn = true;
+                username = extras.getString("username");
             } else {
                 loggedIn = false;
             }
@@ -195,7 +202,33 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             }
         });
 
-        Log.d("mMap", "first?");
+//        if (loggedIn) {
+//            DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
+//            Query query = uDatabase.child("username").equalTo(username);
+//            query.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    if (dataSnapshot.exists()) {
+//                        for (DataSnapshot datasnap : dataSnapshot.getChildren()) {
+//                            User currentuser = datasnap.getValue(User.class);
+//                            lotType = currentuser.getLotTypeFilter();
+//                            specialty = currentuser.getSpecialtyFilter();
+//                            //priceRange = currentuser.getPriceboundFilter();
+//                            priceRange = "";
+//                            intent.putExtra("lotType", lotType);
+//                            intent.putExtra("specialty", specialty);
+//                            intent.putExtra("priceRange", priceRange);
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
+//
+//        }
     }
     //test code
     /*

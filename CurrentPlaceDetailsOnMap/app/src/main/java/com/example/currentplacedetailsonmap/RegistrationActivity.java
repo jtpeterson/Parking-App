@@ -33,6 +33,8 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText editConfirmPassword;
     EditText editEmail;
 
+    private String username;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -45,6 +47,7 @@ public class RegistrationActivity extends AppCompatActivity {
         } else {
             if (extras.getBoolean("loggedIn")) {
                 loggedIn = true;
+                username = extras.getString("username");
             } else {
                 loggedIn = false;
             }

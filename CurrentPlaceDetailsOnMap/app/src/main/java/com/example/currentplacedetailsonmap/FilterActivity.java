@@ -3,10 +3,18 @@ package com.example.currentplacedetailsonmap;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +38,7 @@ public class FilterActivity extends AppCompatActivity {
     public boolean loggedIn;
 
     private Intent intent;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +62,7 @@ public class FilterActivity extends AppCompatActivity {
         } else {
             if (extras.getBoolean("loggedIn")) {
                 loggedIn = true;
+                username = extras.getString("username");
             } else {
                 loggedIn = false;
             }
@@ -72,6 +82,7 @@ public class FilterActivity extends AppCompatActivity {
                 submit();
             }
         });
+
     }
 
     public void submit() {
