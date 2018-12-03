@@ -191,43 +191,44 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             }
         });
 
-        gotoFilter = (Button) findViewById(R.id.reportSpace);
+        gotoFilter = (Button) findViewById(R.id.filterPage);
+        gotoFilter.setVisibility(View.GONE);
 
         gotoFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addCurrentLocationToDatabase();
+               // mMap.clear();
+                openMenuPage();
             }
         });
 
-        if (loggedIn) {
-            DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
-            Query query = uDatabase.child("username").equalTo(username);
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        for (DataSnapshot datasnap : dataSnapshot.getChildren()) {
-                            User currentuser = datasnap.getValue(User.class);
-                            if (currentuser.getLotTypeFilter() != null) {
-                                lotType = currentuser.getLotTypeFilter();
-                                specialty = currentuser.getSpecialtyFilter();
-                                priceRange = currentuser.getPriceboundFilter();
-                                intent.putExtra("lotType", lotType);
-                                intent.putExtra("specialty", specialty);
-                                intent.putExtra("priceRange", priceRange);
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-        }
+//        if (loggedIn) {
+//            DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
+//            Query query = uDatabase.child("username").equalTo(username);
+//            query.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    if (dataSnapshot.exists()) {
+//                        for (DataSnapshot datasnap : dataSnapshot.getChildren()) {
+//                            User currentuser = datasnap.getValue(User.class);
+//                            lotType = currentuser.getLotTypeFilter();
+//                            specialty = currentuser.getSpecialtyFilter();
+//                            //priceRange = currentuser.getPriceboundFilter();
+//                            priceRange = "";
+//                            intent.putExtra("lotType", lotType);
+//                            intent.putExtra("specialty", specialty);
+//                            intent.putExtra("priceRange", priceRange);
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
+//
+//        }
     }
     //test code
     /*
