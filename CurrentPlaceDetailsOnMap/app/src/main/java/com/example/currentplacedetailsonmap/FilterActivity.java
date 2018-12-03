@@ -21,6 +21,9 @@ import java.util.List;
 
 public class FilterActivity extends AppCompatActivity {
 
+    private String usernameOverall;
+
+
     private Spinner spinner1;
     private Spinner spinner2;
     private Spinner spinner3;
@@ -73,12 +76,77 @@ public class FilterActivity extends AppCompatActivity {
             }
         }
 
+        usernameOverall = extras.getString("username");
+
+        if (loggedIn) {
+            DatabaseReference root = FirebaseDatabase.getInstance().getReference();
+            DatabaseReference users = root.child("users");
+            Log.i("Loggedin", usernameOverall);
+
+            users.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    if (snapshot.child(usernameOverall).child("lotTypeFilter").exists() &&
+                            snapshot.child(usernameOverall).child("lotTypeFilter").getValue().toString() != "None") {
+                        int spinner2Selection = Integer.parseInt(snapshot.child(usernameOverall).child("lotTypeFilter").getValue().toString());
+                        spinner2.setSelection(spinner2Selection);
+                    }
+
+                    if(snapshot.child(usernameOverall).child("priceboundFilter").exists() &&
+                            snapshot.child(usernameOverall).child("priceboundFilter").getValue().toString() != "None"){
+
+                        int spinner1Selection = Integer.parseInt(snapshot.child(usernameOverall).child("priceboundFilter").getValue().toString());
+                        spinner1.setSelection(spinner1Selection);
+                    }
+
+                    if(snapshot.child(usernameOverall).child("specialtyFilter").exists() &&
+                            snapshot.child(usernameOverall).child("specialtyFilter").getValue().toString() != "None"){
+                        int spinner3Selection = Integer.parseInt(snapshot.child(usernameOverall).child("specialtyFilter").getValue().toString());
+                        spinner3.setSelection(spinner3Selection);
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 lotType = String.valueOf(spinner1.getSelectedItem());
                 specialty = String.valueOf(spinner2.getSelectedItem());
                 priceRange = String.valueOf(spinner3.getSelectedItem());
+                DatabaseReference root = FirebaseDatabase.getInstance().getReference();
+                final DatabaseReference users = root.child("users");
+
+                users.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        int priceBoundFilter = spinner1.getSelectedItemPosition();
+                        int lotTypeFilter = spinner2.getSelectedItemPosition();
+                        int specialtyFilter = spinner3.getSelectedItemPosition();
+                        Log.i("spin", Integer.toString(priceBoundFilter));
+                        Log.i("spin", Integer.toString(lotTypeFilter));
+                        Log.i("spin", Integer.toString(specialtyFilter));
+
+
+                        users.child(username).child("lotTypeFilter").setValue(lotTypeFilter);
+                        users.child(username).child("priceboundFilter").setValue(priceBoundFilter);
+                        users.child(username).child("specialtyFilter").setValue(specialtyFilter);
+
+//
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
                 submit();
             }
         });

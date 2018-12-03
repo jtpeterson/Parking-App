@@ -20,7 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 
 public class LoginActivity extends AppCompatActivity {
-    protected String username;
+    protected String usernameOverall;
     protected String password;
 
 
@@ -97,6 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                     String fireBasePass = snapshot.child(username).child("password").getValue(String.class);
                     if (password.equals(fireBasePass)) {
                         loggedIn = true;
+                        usernameOverall = username;
                         login();
 
                     }else{
@@ -148,6 +149,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent i = new Intent(this, MapsActivityCurrentPlace.class);
         i.putExtras(extras);
         i.putExtra("loggedIn", loggedIn);
+        i.putExtra("username", usernameOverall);
         startActivity(i);
     }
 
