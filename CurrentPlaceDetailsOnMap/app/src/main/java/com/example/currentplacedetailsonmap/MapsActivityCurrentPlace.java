@@ -196,43 +196,42 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         reportSpace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // mMap.clear();
-                openMenuPage();
+                addCurrentLocationToDatabase();
             }
         });
-
-//        if (loggedIn) {
-//            DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
-//            Query query = uDatabase.child("username").equalTo(username);
-//            query.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    if (dataSnapshot.exists()) {
-//                        for (DataSnapshot datasnap : dataSnapshot.getChildren()) {
-//                            User currentuser = datasnap.getValue(User.class);
-//                            lotType = currentuser.getLotTypeFilter();
-//                            specialty = currentuser.getSpecialtyFilter();
-//                            //priceRange = currentuser.getPriceboundFilter();
-//                            priceRange = "";
-//                            intent.putExtra("lotType", lotType);
-//                            intent.putExtra("specialty", specialty);
-//                            intent.putExtra("priceRange", priceRange);
-//                        }
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
-//
-//        }
     }
 
     public void openMenuPage() {
         intent.setClass(this, MenuActivity.class);
         startActivity(intent);
+    }
+
+    public void setUserFilters() {
+        DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
+        Query query = uDatabase.child("username").equalTo(username);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot dataSnap : dataSnapshot.getChildren()) {
+                        User currentUser = dataSnap.getValue(User.class);
+                        if (currentUser.getLotTypeFilter() != null) {
+                            lotType = currentUser.getLotTypeFilter();
+                            specialty = currentUser.getSpecialtyFilter();
+                            priceRange = currentUser.getPriceboundFilter();
+                            intent.putExtra("lotType", lotType);
+                            intent.putExtra("specialty", specialty);
+                            intent.putExtra("priceRange", priceRange);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void setFilters() {
@@ -281,8 +280,6 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             mMap.clear();
             Log.d("clearFinished", getIntent().getStringExtra("lotType"));
             addMarkersFilter(upperBound, lotList, specList);
-            //addMarkerNum(getIntent().getStringExtra("upperBound").toString());
-            //addMarkers();
         } else {
             addMarkers();
         }
@@ -369,8 +366,12 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
+        if (loggedIn) {
+            setUserFilters();
+            Log.d("ueser", "filters");
+        }
         setFilters();
-        //addMarkers();
+
         Log.d("mMap", mMap.toString());
     }
     private  void addMarkerNum(final String upperBound){

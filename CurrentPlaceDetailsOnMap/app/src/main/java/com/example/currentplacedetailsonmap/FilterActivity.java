@@ -123,31 +123,7 @@ public class FilterActivity extends AppCompatActivity {
                 specialty = String.valueOf(spinner2.getSelectedItem());
                 priceRange = String.valueOf(spinner3.getSelectedItem());
                 if (loggedIn) {
-                DatabaseReference root = FirebaseDatabase.getInstance().getReference();
-                final DatabaseReference users = root.child("users");
-
-                users.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        int priceBoundFilter = spinner1.getSelectedItemPosition();
-                        int lotTypeFilter = spinner2.getSelectedItemPosition();
-                        int specialtyFilter = spinner3.getSelectedItemPosition();
-                        Log.i("spin", Integer.toString(priceBoundFilter));
-                        Log.i("spin", Integer.toString(lotTypeFilter));
-                        Log.i("spin", Integer.toString(specialtyFilter));
-
-
-                        users.child(username).child("lotTypeFilter").setValue(lotTypeFilter);
-                        users.child(username).child("priceboundFilter").setValue(priceBoundFilter);
-                        users.child(username).child("specialtyFilter").setValue(specialtyFilter);
-
-//
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                    saveUserFilters();
                 }
                 submit();
             }
@@ -164,6 +140,33 @@ public class FilterActivity extends AppCompatActivity {
         i.putExtra("specialty", specialty);
         i.putExtra("priceRange", priceRange);
         startActivity(i);
+    }
+
+    public void saveUserFilters() {
+        DatabaseReference root = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference users = root.child("users");
+
+        users.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int priceBoundFilter = spinner1.getSelectedItemPosition();
+                int lotTypeFilter = spinner2.getSelectedItemPosition();
+                int specialtyFilter = spinner3.getSelectedItemPosition();
+                Log.i("spin", Integer.toString(priceBoundFilter));
+                Log.i("spin", Integer.toString(lotTypeFilter));
+                Log.i("spin", Integer.toString(specialtyFilter));
+
+
+                users.child(username).child("lotTypeFilter").setValue(lotTypeFilter);
+                users.child(username).child("priceboundFilter").setValue(priceBoundFilter);
+                users.child(username).child("specialtyFilter").setValue(specialtyFilter);
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void setStrings() {

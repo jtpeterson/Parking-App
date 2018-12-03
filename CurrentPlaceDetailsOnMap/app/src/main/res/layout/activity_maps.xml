@@ -27,10 +27,11 @@
         android:visibility="invisible" />
 
     <Button
-        android:id="@+id/filterPage"
-        android:layout_width="match_parent"
+        android:id="@+id/reportSpace"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="Filters"
-        android:textColor="#fff" />
+        android:text="Report A Space"
+        android:layout_gravity="top"
+        android:background="@color/colorPrimary"
+        android:textColor="#ffffff"/>
 </fragment>
