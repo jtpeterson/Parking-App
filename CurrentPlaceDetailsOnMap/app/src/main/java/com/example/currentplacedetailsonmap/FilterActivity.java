@@ -122,10 +122,11 @@ public class FilterActivity extends AppCompatActivity {
                 lotType = String.valueOf(spinner1.getSelectedItem());
                 specialty = String.valueOf(spinner2.getSelectedItem());
                 priceRange = String.valueOf(spinner3.getSelectedItem());
+                if (loggedIn) {
                 DatabaseReference root = FirebaseDatabase.getInstance().getReference();
                 final DatabaseReference users = root.child("users");
 
-                users.addValueEventListener(new ValueEventListener() {
+                users.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         int priceBoundFilter = spinner1.getSelectedItemPosition();
@@ -147,6 +148,7 @@ public class FilterActivity extends AppCompatActivity {
 
                     }
                 });
+                }
                 submit();
             }
         });

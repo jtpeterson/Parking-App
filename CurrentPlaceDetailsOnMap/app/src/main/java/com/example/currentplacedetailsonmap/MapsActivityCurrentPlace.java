@@ -97,7 +97,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     // Buttons
     private Button parking;
     private Button leaving;
-    private Button gotoFilter;
+    private Button reportSpace;
 
 
     //User
@@ -191,9 +191,9 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             }
         });
 
-        gotoFilter = (Button) findViewById(R.id.reportSpace);
+        reportSpace = (Button) findViewById(R.id.reportSpace);
 
-        gotoFilter.setOnClickListener(new View.OnClickListener() {
+        reportSpace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addCurrentLocationToDatabase();
@@ -229,17 +229,6 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
 
         }
     }
-    //test code
-    /*
-    private void populateDatabase() {
-        ParkingSpot spot = new ParkingSpot(true, 37.4276, -122.0845);
-        mDatabase.child(spot.getId()).setValue(spot);
-        ParkingSpot spot2 = new ParkingSpot(true, 37.4286, -122.0846);
-        mDatabase.child(spot2.getId()).setValue(spot2);
-        ParkingSpot spot3 = new ParkingSpot(true, 37.4296, -122.0847);
-        mDatabase.child(spot3.getId()).setValue(spot3);
-
-    }*/
 
     public void openMenuPage() {
         intent.setClass(this, MenuActivity.class);
@@ -538,16 +527,6 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     }
 
 
-    /**
-     * Saves User Filters to the database
-     * @param user
-     */
-    private void saveUserFilters(User user) {
-        DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference("users");
-        uDatabase.child(user.getUsername()).setValue(user);
-
-    }
-
 
     /**
      * Gets the current location of the device, and positions the map's camera.
@@ -805,4 +784,5 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             Log.e("Exception: %s", e.getMessage());
         }
     }
+
 }
